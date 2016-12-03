@@ -7,7 +7,6 @@ from geopy.geocoders import Nominatim
 import backend
 from datetime import date
 from yahoo_finance import Share
-# from finance import get_historical_price
 
 
 def get_between_days(startdate, enddate):
@@ -62,12 +61,13 @@ def get_historical_price(startdate, enddate):
 
     return date_adj_close[::-1]
 
+
 def graphStocks(start, end):
     print(start, end)
     Price = get_historical_price(start, end)
-    print("Price",Price)
+    print("Price", Price)
     y_values = []
-    x_values =[]
+    x_values = []
     for i in Price:
         x_values.append(i[0])
         y_values.append(i[1])
@@ -76,21 +76,34 @@ def graphStocks(start, end):
     axarr[2].plot(x_values, y_values)
     canvas.show()
 
-# def graphWeather(lat, long, dates):
-#     data = backend.getAllWeather(lat, long ,dates)
-#     maxs = []
-#     mins = []
-#     precis = []
-#     for i in data:
-#         maxs.append(i[1])
-#         mins.append(i[0])
-#         precis.append(i[2])
-#     graphPreci()
+
+def graphWeather(lat, long, startDate, endDate):
+
+    dates=[]
+    data = backend.getAllWeather(lat, long, dates)
+    maxs = []
+    mins = []
+    precis = []
+    for i in data:
+        maxs.append(i[1])
+        mins.append(i[0])
+        precis.append(i[2])
+    graphPreci(precis)
+    graphTemp(maxs)
 
 
+def graphTemp(maxi, mini):
+    maxs = array(maxi)
+    mins = array(mini)
+    avg = (maxs + mins) / 2
+    axarr[0].plot(maxs)
+    axarr[0].plot(mins)
+    axarr[0].plot(avg)
 
-# def graphTemp ()
-# def graphPreci():
+
+def graphPreci(precip):
+    axarr[1].plot(precip)
+
 
 def getHandleLocation():
     works = False
@@ -116,10 +129,9 @@ def getHandleLocation():
         location.config(bg="white")
         twitterHandleEntry.config(bg="white")
         startday, endday = graphTweets(tweetHandle)
-        graphStocks(startday,endday)
+        graphStocks(startday, endday)
+        graphWeather(loc.latitude, loc.longitude,)
 
-
-# Send to Advaity
 
 root = Tk()
 use('TkAgg')
