@@ -16,9 +16,12 @@ x = ['2016-11-11', '2016-11-12', '2016-11-13', '2016-11-15', '2016-11-16',
  '2016-11-28', '2016-11-29', '2016-11-30', '2016-12-01', '2016-12-02',
  '2016-12-03']
 
-new_x = []
+def get_day_id(list_day):
+    new_x = []
 
-for i in x:
-    new_x.append(get_between_days(x[0], i))
+    for i in x:
+        new_x.append(get_between_days(x[0], i))
 
-print(new_x)
+    return(new_x)
+
+print(get_day_id(x))
