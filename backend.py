@@ -81,14 +81,15 @@ def getWeather(lat, long, startDate, endDate):
         #unixTime = round(time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()))
         unixTime = round(time.mktime(date.timetuple()))
         send_url = "https://api.darksky.net/forecast/" + config.darkSkyKey +"/"+ str(lat) + "," + str(long) + ","+ str(unixTime)
+        # print(send_url)
         r = requests.get(send_url)
         j = json.loads(r.text)
         tempMin = j["daily"]["data"][0]["apparentTemperatureMin"]
         tempMax =j["daily"]["data"][0]["apparentTemperatureMax"]
-        precip = j["daily"]["data"][0]["precipIntensity"]
+        hum = j["daily"]["data"][0]["humidity"]
         tempMin = (tempMin-32) * 5/9
         tempMax = (tempMax-32) * 5/9
-        final.append([tempMin, tempMax, precip])
+        final.append([tempMin, tempMax, hum])
     return final
 
 

@@ -6,6 +6,7 @@ from numpy import *
 from geopy.geocoders import Nominatim
 import backend
 from datetime import date
+import datetime
 from yahoo_finance import Share
 
 
@@ -79,7 +80,7 @@ def graphStocks(start, end):
 
 def graphWeather(lat, long, startDate, endDate):
     dates = []
-    data = backend.getWeather(lat, long, startDate,endDate)
+    data = backend.getWeather(lat, long, startDate, endDate)
     maxs = []
     mins = []
     precis = []
@@ -87,7 +88,7 @@ def graphWeather(lat, long, startDate, endDate):
         maxs.append(i[1])
         mins.append(i[0])
         precis.append(i[2])
-    graphPreci(precis)
+    graphHum(precis)
     graphTemp(maxs, mins)
 
 
@@ -101,8 +102,8 @@ def graphTemp(maxi, mini):
     canvas.show()
 
 
-def graphPreci(precip):
-    axarr[1].plot(precip)
+def graphHum(hum):
+    axarr[1].plot(hum)
     canvas.show()
 
 
@@ -130,16 +131,34 @@ def getHandleLocation():
         location.config(bg="white")
         twitterHandleEntry.config(bg="white")
         startday, endday = graphTweets(tweetHandle)
+        # print(startday, endday)
+        s = startday.split("-")
+        e = endday.split("-")
+        # print(s, e)
+        for i in range(0, 3):
+            s[i] = int(s[i])
+            e[i] = int(e[i])
+        # print(s,e)
+        start_date = datetime.date(s[0], s[1], s[2])
+        end_date = datetime.date(e[0], e[1], e[2])
+        # print(start_date,end_date)
+        labels = list(backend.daterange(start_date, end_date))
+        # print("LABEL",labels)
         graphStocks(startday, endday)
-        graphWeather(loc.latitude, loc.longitude, startday,endday )
+        rot = 15
+        axarr[0].set_xticklabels(labels, rotation=rot)
+        axarr[1].set_xticklabels(labels, rotation=rot)
+        axarr[2].set_xticklabels(labels, rotation=rot)
+        axarr[3].set_xticklabels(labels, rotation=rot)
+        f.tight_layout()
+        graphWeather(loc.latitude, loc.longitude, startday, endday)
 
 
 root = Tk()
 use('TkAgg')
-root.wm_title("Embedding in TK")
+root.wm_title("NAME")
 
-x = array([1, 4, 5, 7, 6, 5, 76])
-y = array([45, 2, 12, 67, 97, 46, 2])
+
 
 x = array([])
 y = array([])
@@ -149,24 +168,23 @@ axarr[0].plot(x, y)
 axarr[0].set_title('Weather')
 
 axarr[1].scatter(x, y)
-axarr[1].set_title('Precipitation')
+axarr[1].set_title('Humidity')
 
 axarr[2].plot(x, y ** 2)
 axarr[2].set_title('Stock Exchange')
 
 axarr[3].scatter(x, y)
 axarr[3].set_title('Happiness')
-xlabel(1,text="Dates")
-
+xlabel(1, text="Dates")
 canvas = FigureCanvasTkAgg(f, master=root)
 f.tight_layout()
 canvas.show()
 
-canvas.get_tk_widget().pack(side=LEFT, expand=1)
+canvas.get_tk_widget().pack(side=TOP, expand=1)
 
 # toolbar = NavigationToolbar2TkAgg(canvas, root)
 # toolbar.update()
-canvas._tkcanvas.pack(side=LEFT, expand=1)
+canvas._tkcanvas.pack(side=TOP, expand=1)
 
 controlP = Frame(root)
 controlP.pack()
@@ -188,8 +206,8 @@ def _quit():
     root.destroy()  # this is necessary on Windows to prevent
 
 
-button = Button(master=root, text='Quit', command=_quit)
-button.pack(side=BOTTOM)
+button = Button(controlP, text='Quit', command=_quit)
+button.grid(row=5,column=2)
 
 root.protocol("WM_DELETE_WINDOW", _quit)
 root.mainloop()
