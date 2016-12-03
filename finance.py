@@ -1,11 +1,11 @@
 from yahoo_finance import Share
 
-nasdaq = Share('^IXIC')
+nya = Share('NYA')
 
 
 def get_historical_price(startdate, enddate):
     date_adj_close = []
-    historical_data = nasdaq.get_historical(startdate, enddate)
+    historical_data = nya.get_historical(startdate, enddate)
 
     for i in historical_data:
         date_adj_close.append([i['Date'], i['Adj_Close']])
@@ -13,4 +13,4 @@ def get_historical_price(startdate, enddate):
     return date_adj_close[::-1]
 
 
-print(get_historical_price('2016-11-30', '2016-12-02'))
+#print(get_historical_price('2016-11-30', '2016-12-02'))
