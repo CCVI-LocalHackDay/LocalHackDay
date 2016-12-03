@@ -1,7 +1,7 @@
 from tkinter import *
 from matplotlib import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.pyplot import subplots
+from matplotlib.pyplot import subplots, ylabel, findobj, title, xlabel, xticks
 from numpy import *
 from geopy.geocoders import Nominatim
 import backend
@@ -78,9 +78,8 @@ def graphStocks(start, end):
 
 
 def graphWeather(lat, long, startDate, endDate):
-
-    dates=[]
-    data = backend.getAllWeather(lat, long, dates)
+    dates = []
+    data = backend.getWeather(lat, long, startDate,endDate)
     maxs = []
     mins = []
     precis = []
@@ -89,7 +88,7 @@ def graphWeather(lat, long, startDate, endDate):
         mins.append(i[0])
         precis.append(i[2])
     graphPreci(precis)
-    graphTemp(maxs)
+    graphTemp(maxs, mins)
 
 
 def graphTemp(maxi, mini):
@@ -99,10 +98,12 @@ def graphTemp(maxi, mini):
     axarr[0].plot(maxs)
     axarr[0].plot(mins)
     axarr[0].plot(avg)
+    canvas.show()
 
 
 def graphPreci(precip):
     axarr[1].plot(precip)
+    canvas.show()
 
 
 def getHandleLocation():
@@ -130,7 +131,7 @@ def getHandleLocation():
         twitterHandleEntry.config(bg="white")
         startday, endday = graphTweets(tweetHandle)
         graphStocks(startday, endday)
-        graphWeather(loc.latitude, loc.longitude,)
+        graphWeather(loc.latitude, loc.longitude, startday,endday )
 
 
 root = Tk()
@@ -143,14 +144,20 @@ y = array([45, 2, 12, 67, 97, 46, 2])
 x = array([])
 y = array([])
 f, axarr = subplots(4)
+
 axarr[0].plot(x, y)
 axarr[0].set_title('Weather')
-axarr[3].scatter(x, y)
-axarr[3].set_title('Happiness')
+
 axarr[1].scatter(x, y)
 axarr[1].set_title('Precipitation')
+
 axarr[2].plot(x, y ** 2)
 axarr[2].set_title('Stock Exchange')
+
+axarr[3].scatter(x, y)
+axarr[3].set_title('Happiness')
+xlabel(1,text="Dates")
+
 canvas = FigureCanvasTkAgg(f, master=root)
 f.tight_layout()
 canvas.show()
