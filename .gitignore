@@ -90,6 +90,4 @@ ENV/
 
 #Idea
 .idea
-
-#Config
 config.py
