@@ -16,7 +16,7 @@ def get_day_id(list_day):
     new_x = []
 
     for i in list_day:
-        new_x.append(get_between_days(x[0], i))
+        new_x.append(get_between_days(list_day[0], i))
 
     return(new_x)
 
