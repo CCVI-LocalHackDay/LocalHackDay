@@ -72,11 +72,15 @@ def getWeather(lat, long, date):
     tempMin = (tempMin-32) * 5/9
     tempMax = (tempMax-32) * 5/9
     return [tempMin, tempMax, precip]
+
+
 def getAllWeather(lat, long, dates):
     data = []
     for date in dates:
         data.append(getWeather(lat, long, date))
     return data
+
+
 if __name__ == '__main__':
     print(getAllWeather(43.4499556, -80.5750528, ['2016-11-11', '2016-11-12', '2016-11-13', '2016-11-15', '2016-11-16',
  '2016-11-17', '2016-11-18', '2016-11-19', '2016-11-20', '2016-11-21',
