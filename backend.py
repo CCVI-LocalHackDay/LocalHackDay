@@ -58,29 +58,47 @@ def getTweetValues(handle):
     #     dates.append(result["created_at"])
 
     return byDate
-def getWeather(lat, long, date):
+
+def daterange(start_date, end_date):
+    print(end_date,start_date)
+    for n in range(int ((end_date - start_date).days)):
+        yield start_date + datetime.timedelta(n)
+
+def getWeather(lat, long, startDate, endDate):
     coords = [lat, long]
-    # fio = ForecastIO.ForecastIO(config.darkSkyKey, latitude=coords[0], longitude=coords[1])
-    # current = FIOCurrently.FIOCurrently(fio)
-    unixTime = round(time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()))
-    send_url = "https://api.darksky.net/forecast/" + config.darkSkyKey +"/"+ str(lat) + "," + str(long) + ","+ str(unixTime)
-    r = requests.get(send_url)
-    j = json.loads(r.text)
-    tempMin = j["daily"]["data"][0]["apparentTemperatureMin"]
-    tempMax =j["daily"]["data"][0]["apparentTemperatureMax"]
-    precip = j["daily"]["data"][0]["precipIntensity"]
-    tempMin = (tempMin-32) * 5/9
-    tempMax = (tempMax-32) * 5/9
-    return [tempMin, tempMax, precip]
-def getAllWeather(lat, long, dates):
-    data = []
-    for date in dates:
-        data.append(getWeather(lat, long, date))
-    return data
+    final = []
+    s = startDate.split("-")
+    e = endDate.split("-")
+    for i in range(0, 3):
+        s[i] = int(s[i])
+        e[i] = int(e[i])
+    start_date = datetime.date(s[0], s[1], s[2])
+    end_date = datetime.date(e[0], e[1], e[2])
+    for date in daterange(start_date, end_date):
+
+        # fio = ForecastIO.ForecastIO(config.darkSkyKey, latitude=coords[0], longitude=coords[1])
+        # current = FIOCurrently.FIOCurrently(fio)
+        #unixTime = round(time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()))
+        unixTime = round(time.mktime(date.timetuple()))
+        send_url = "https://api.darksky.net/forecast/" + config.darkSkyKey +"/"+ str(lat) + "," + str(long) + ","+ str(unixTime)
+        r = requests.get(send_url)
+        j = json.loads(r.text)
+        tempMin = j["daily"]["data"][0]["apparentTemperatureMin"]
+        tempMax =j["daily"]["data"][0]["apparentTemperatureMax"]
+        precip = j["daily"]["data"][0]["precipIntensity"]
+        tempMin = (tempMin-32) * 5/9
+        tempMax = (tempMax-32) * 5/9
+        final.append([tempMin, tempMax, precip])
+    return final
+
+
+# def getAllWeather(lat, long, dates):
+#     data = []
+#     for date in dates:
+#         data.append(getWeather(lat, long, date))
+#     return data
+
+
 if __name__ == '__main__':
-    print(getAllWeather(43.4499556, -80.5750528, ['2016-11-11', '2016-11-12', '2016-11-13', '2016-11-15', '2016-11-16',
- '2016-11-17', '2016-11-18', '2016-11-19', '2016-11-20', '2016-11-21',
- '2016-11-22', '2016-11-23', '2016-11-24', '2016-11-26', '2016-11-27',
- '2016-11-28', '2016-11-29', '2016-11-30', '2016-12-01', '2016-12-02',
- '2016-12-03']))
-    print(getTweetValues("BBCBreaking"))
+    print(getWeather(43.4499556, -80.5750528, '2016-11-11', '2016-12-03'))
+    #print(getTweetValues("BBCBreaking"))
