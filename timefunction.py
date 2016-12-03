@@ -1,4 +1,5 @@
-from datetime import date
+import datetime
+
 
 def get_between_days(startdate, enddate):
     d1 = startdate.split('-')
@@ -7,6 +8,36 @@ def get_between_days(startdate, enddate):
     d2 = date(int(d2[0]), int(d2[1]), int(d2[2]))
     delta = d2 - d1
     return(delta.days)
+
+def get_range_days(startdate, enddate):
+    dlist = []
+    dateList = []
+    d1 = startdate.split('-')
+    d2 = enddate.split('-')
+    d1 = datetime.date(int(d1[0]), int(d1[1]), int(d1[2]))
+    d2 = datetime.date(int(d2[0]), int(d2[1]), int(d2[2]))
+    delta = d2 - d1
+    d = delta.days
+    for i in range(0, d+1):
+        dlist.append(d2 - datetime.timedelta(days=i))
+
+    for i in dlist:
+        year = str(i.year)
+        if len(str(i.month)) == 2:
+            month = str(i.month)
+        else:
+            month = '0' + str(i.month)
+        if len(str(i.day)) == 2:
+            day = str(i.day)
+        else:
+            day = '0' + str(i.day)
+        dateList.append("%s-%s-%s" %(year, month, day))
+
+    dateList.reverse()
+
+    return dateList
+
+print(get_range_days('2016-11-11', '2016-12-02'))
 
 #print(get_between_days('2016-11-11', '2016-11-11'))
 
