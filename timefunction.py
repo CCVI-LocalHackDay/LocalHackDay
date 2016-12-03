@@ -6,7 +6,7 @@ def get_between_days(startdate, enddate):
     d1 = date(int(d1[0]), int(d1[1]), int(d1[2]))
     d2 = date(int(d2[0]), int(d2[1]), int(d2[2]))
     delta = d2 - d1
-    return(delta.days + 1)
+    return(delta.days)
 
 #print(get_between_days('2016-11-11', '2016-11-11'))
 
