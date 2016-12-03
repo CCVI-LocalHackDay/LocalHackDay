@@ -4,30 +4,55 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.pyplot import subplots
 from numpy import *
 from geopy.geocoders import Nominatim
+import backend
 
+
+def graphTweets(handle):
+    dataSetTweetValue = (backend.getTweetValues(handle))
+    print(dataSetTweetValue)
+    x = []
+    y = []
+    keys = []
+    for i in dataSetTweetValue:
+        keys.append(i)
+
+    keys = sort(keys)
+    print(keys)
+    for i in keys:
+        y.append(dataSetTweetValue[i])
+    axarr[0].plot(y)
+    print(y)
+    canvas.show()
+
+# def graphStocks
 
 def getHandleLocation():
-    tweetHandle = twitterHandle.get()
+    works = False
+    tweetHandle = twitterHandleEntry.get()
     if tweetHandle != "":
         geoL = Nominatim()
         loc = geoL.geocode(location.get())
         if loc is None:
-            location.delete(0,END)
-            twitterHandle.config(bg="white")
+            location.delete(0, END)
+            twitterHandleEntry.config(bg="white")
             location.config(bg="red")
         else:
             print(loc)
             print(tweetHandle, loc.latitude, loc.longitude)
+            works = True
     else:
-        twitterHandle.config(bg="red")
+        twitterHandleEntry.config(bg="red")
         location.config(bg="white")
-        twitterHandle.delete(0,END)
+        twitterHandleEntry.delete(0, END)
+        works = True
 
-    location.config(bg="white")
-    twitterHandle.config(bg="white")
+    if works:
+        location.config(bg="white")
+        twitterHandleEntry.config(bg="white")
+        graphTweets(tweetHandle)
 
 
-#   Send to Advaity
+# Send to Advaity
 
 root = Tk()
 use('TkAgg')
@@ -58,10 +83,12 @@ canvas._tkcanvas.pack(side=LEFT, expand=1)
 controlP = Frame(root)
 controlP.pack()
 Label(controlP, text="Enter Twitter Handle", anchor=NW).grid(row=1, column=1)
-twitterHandle = Entry(controlP, exportselection=0)
-twitterHandle.grid(row=1, column=2)
+twitterHandleEntry = Entry(controlP, exportselection=0)
+twitterHandleEntry.insert(0,"realdonaldtrump")
+twitterHandleEntry.grid(row=1, column=2)
 Label(controlP, text="Enter Location").grid(row=2, column=1)
 location = Entry(controlP, exportselection=0)
+location.insert(0, "382 Cavendish Drive Waterloo Ontario")
 location.grid(row=2, column=2)
 
 sub = Button(controlP, text="Entry", command=getHandleLocation)
@@ -76,4 +103,5 @@ def _quit():
 button = Button(master=root, text='Quit', command=_quit)
 button.pack(side=BOTTOM)
 
+root.protocol("WM_DELETE_WINDOW", _quit)
 root.mainloop()

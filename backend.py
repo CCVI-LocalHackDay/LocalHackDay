@@ -3,6 +3,10 @@ import config
 import numpy
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from forecastiopy import *
+import requests
+import json
+import time
+import datetime
 
 def getTweetValues(handle):
     twitter = Twitter(auth=OAuth(config.twitterKeys["accessKey"], config.twitterKeys["accessSecret"], config.twitterKeys["consumerKey"], config.twitterKeys["consumerSecret"]))
@@ -52,10 +56,31 @@ def getTweetValues(handle):
     #     # print(ss)
     #     tweets.append(text)
     #     dates.append(result["created_at"])
+
     return byDate
-def getWeather(lat, long):
-    fio = ForecastIO.ForecastIO(config.darkSkyKey, latitude=Lisbon[0], longitude=Lisbon[1])
-    current = FIOCurrently.FIOCurrently(fio)
-    print('Temperature:', current.temperature)
+def getWeather(lat, long, date):
+    coords = [lat, long]
+    # fio = ForecastIO.ForecastIO(config.darkSkyKey, latitude=coords[0], longitude=coords[1])
+    # current = FIOCurrently.FIOCurrently(fio)
+    unixTime = round(time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()))
+    send_url = "https://api.darksky.net/forecast/" + config.darkSkyKey +"/"+ str(lat) + "," + str(long) + ","+ str(unixTime)
+    r = requests.get(send_url)
+    j = json.loads(r.text)
+    tempMin = j["daily"]["data"][0]["apparentTemperatureMin"]
+    tempMax =j["daily"]["data"][0]["apparentTemperatureMax"]
+    precip = j["daily"]["data"][0]["precipIntensity"]
+    tempMin = (tempMin-32) * 5/9
+    tempMax = (tempMax-32) * 5/9
+    return [tempMin, tempMax, precip]
+def getAllWeather(lat, long, dates):
+    data = []
+    for date in dates:
+        data.append(getWeather(lat, long, date))
+    return data
 if __name__ == '__main__':
+    print(getAllWeather(43.4499556, -80.5750528, ['2016-11-11', '2016-11-12', '2016-11-13', '2016-11-15', '2016-11-16',
+ '2016-11-17', '2016-11-18', '2016-11-19', '2016-11-20', '2016-11-21',
+ '2016-11-22', '2016-11-23', '2016-11-24', '2016-11-26', '2016-11-27',
+ '2016-11-28', '2016-11-29', '2016-11-30', '2016-12-01', '2016-12-02',
+ '2016-12-03']))
     print(getTweetValues("BBCBreaking"))
