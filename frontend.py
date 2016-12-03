@@ -8,12 +8,23 @@ from geopy.geocoders import Nominatim
 
 def getHandleLocation():
     tweetHandle = twitterHandle.get()
-    geoL = Nominatim()
-    loc = geoL.geocode(location.get())
-    if tweetHandle is None:
-        location.delete()
-    if loc is None:
-    print(tweetHandle,loc.latitude,loc.longitude)
+    if tweetHandle != "":
+        geoL = Nominatim()
+        loc = geoL.geocode(location.get())
+        if loc is None:
+            location.delete(0,END)
+            twitterHandle.config(bg="white")
+            location.config(bg="red")
+        else:
+            print(loc)
+            print(tweetHandle, loc.latitude, loc.longitude)
+    else:
+        twitterHandle.config(bg="red")
+        location.config(bg="white")
+        twitterHandle.delete(0,END)
+
+    location.config(bg="white")
+    twitterHandle.config(bg="white")
 
 
 #   Send to Advaity
@@ -47,12 +58,11 @@ canvas._tkcanvas.pack(side=LEFT, expand=1)
 controlP = Frame(root)
 controlP.pack()
 Label(controlP, text="Enter Twitter Handle", anchor=NW).grid(row=1, column=1)
-twitterHandle = Entry(controlP,exportselection=0)
+twitterHandle = Entry(controlP, exportselection=0)
 twitterHandle.grid(row=1, column=2)
-Label(controlP,text="Enter Location").grid(row=2,column=1)
+Label(controlP, text="Enter Location").grid(row=2, column=1)
 location = Entry(controlP, exportselection=0)
 location.grid(row=2, column=2)
-
 
 sub = Button(controlP, text="Entry", command=getHandleLocation)
 sub.grid(row=5, column=1)
@@ -65,6 +75,5 @@ def _quit():
 
 button = Button(master=root, text='Quit', command=_quit)
 button.pack(side=BOTTOM)
-
 
 root.mainloop()
