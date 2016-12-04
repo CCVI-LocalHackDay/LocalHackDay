@@ -150,7 +150,7 @@ def getHandleLocation():
 
 root = Tk()
 use('TkAgg')
-root.wm_title("")
+root.wm_title("Legendary Lines")
 
 
 
