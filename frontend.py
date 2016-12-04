@@ -191,7 +191,6 @@ twitterHandleEntry.insert(0, "pennyexpert")
 twitterHandleEntry.grid(row=1, column=2)
 Label(controlP, text="Enter Location").grid(row=2, column=1)
 location = Entry(controlP, exportselection=0)
-location.insert(0, "382 Cavendish Drive Waterloo Ontario")
 location.grid(row=2, column=2)
 
 sub = Button(controlP, text="Entry", command=getHandleLocation)
