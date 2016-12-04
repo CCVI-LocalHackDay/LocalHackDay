@@ -13,4 +13,4 @@ def get_historical_price(startdate, enddate):
     return date_adj_close[::-1]
 
 
-print(get_historical_price('2016-11-11', '2016-12-03'))
+# print(get_historical_price('2016-11-11', '2016-12-03'))

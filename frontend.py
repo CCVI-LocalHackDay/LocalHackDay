@@ -39,8 +39,6 @@ def graphTweets(handle):
         keys.append(i)
 
     keys = sorted(keys)
-    # print(keys)
-    # print("FRED", get_day_id(keys))
     x_values = get_day_id(keys)
     for i in keys:
         y.append(dataSetTweetValue[i])
@@ -112,8 +110,6 @@ def getHandleLocation():
             twitterHandleEntry.config(bg="white")
             location.config(bg="red")
         else:
-            print(loc)
-            print(tweetHandle, loc.latitude, loc.longitude)
             works = True
     else:
         twitterHandleEntry.config(bg="red")
