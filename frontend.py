@@ -132,7 +132,7 @@ def getHandleLocation():
         for i in range(0, 3):
             s[i] = int(s[i])
             e[i] = int(e[i])
-
+        # print(s,e)
         start_date = datetime.date(s[0], s[1], s[2])
         end_date = datetime.date(e[0], e[1], e[2])
         # print(start_date,end_date)
@@ -142,19 +142,24 @@ def getHandleLocation():
         Label(controlP,text=("Start Date: "+startday)).grid(row=1,column=3)
         Label(controlP,text=("End Date: "+endday)).grid(row=2,column=3)
         f.tight_layout()
+        xlo=matplotlib.pyplot.MaxNLocator(5)
+        axarr[0].yaxis.set_major_locator(xlo)
         graphWeather(loc.latitude, loc.longitude, startday, endday)
         canvas.show()
 
 
 root = Tk()
 use('TkAgg')
-root.wm_title("NAME")
+root.wm_title("")
 
 
 
 x = array([])
 y = array([])
 f, axarr = subplots(4)
+f.set_figheight(8)
+f.set_figwidth(10)
+
 
 axarr[0].plot(x, y)
 axarr[0].set_title('Temperature')
@@ -186,7 +191,7 @@ controlP = Frame(root)
 controlP.pack(side=LEFT)
 Label(controlP, text="Enter Twitter Handle").grid(row=1, column=1)
 twitterHandleEntry = Entry(controlP, exportselection=0)
-twitterHandleEntry.insert(0, "realdonaldtrump")
+twitterHandleEntry.insert(0, "pennyexperts")
 twitterHandleEntry.grid(row=1, column=2)
 Label(controlP, text="Enter Location").grid(row=2, column=1)
 location = Entry(controlP, exportselection=0)
